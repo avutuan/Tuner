@@ -28,7 +28,7 @@ def nearest_note(examined_pitch):
 # Algorithm that uses nearest_note() function to find the amount of cents away the given frequency is from the nearest note
 def distance_from_nearest_note_in_cents(examined_pitch):
     close_tuple = nearest_note(examined_pitch)
-    cents = 1200 * np.log2(examined_pitch/close_tuple[1])
+    cents = 1200 * np.log2(examined_pitch / close_tuple[1])
     return np.round(cents)
 
 # Algorithm to find the peak frequency of an audio recording given the samples and the sample rate
@@ -60,8 +60,11 @@ def main():
             # Find the peak frequency from the data
             frequency = find_freq(audio_data, RATE)
             
-            # Find closest note
-            note, closest_freq = nearest_note(frequency)
+            try:
+                # Find closest note
+                note, closest_freq = nearest_note(frequency)
+            except OverflowError as e:
+                continue
             
             # Calculate the amount of cents away the note is
             distance_from_note = distance_from_nearest_note_in_cents(frequency)
